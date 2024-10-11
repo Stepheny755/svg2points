@@ -1,1 +1,5 @@
+# ignore env
+env
+
+# ignore input files
 **.svg
