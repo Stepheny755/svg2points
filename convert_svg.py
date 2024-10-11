@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(description="Converts SVG file into 2D (x,y) Po
 parser.add_argument("-f", "--file", help="SVG file to add", required=True)
 parser.add_argument("-o", "--output", help="Output file name", default="points.csv")
 parser.add_argument("--density", help="Density of SVG points", default=1)
-parser.add_argument("--scale", help="Scale of the image", default=5)
+parser.add_argument("--scale", help="Scale of the image", default=1)
 parser.add_argument("--x_offset", help="x offset for SVG points", default=0)
 parser.add_argument("--y_offset", help="y offset for SVG points", default=0)
 args = parser.parse_args()
@@ -56,14 +56,22 @@ with open(args.file, "r") as file:
 
 # parse svg path into xy points
 doc = minidom.parseString(data)
+update_scale = 1 if not isinstance(args.scale, int) else args.scale
 points = points_from_doc(
     doc,
-    density=args.density,
-    scale=args.scale,
+    density=int(args.density),
+    scale=update_scale,
     offset=(args.x_offset, args.y_offset),
 )
 doc.unlink()
 
 # save to csv
 points = np.array(points)
+if not isinstance(args.scale, int):
+    points = points * float(args.scale)
+print(f"Min x: {points[:, 0].min()}")
+print(f"Max x: {points[:, 0].max()}")
+print(f"Min y: {points[:, 1].min()}")
+print(f"Max y: {points[:, 1].max()}")
+print(f"# points: {points.shape[0]}")
 np.savetxt(args.output, points, delimiter=",", fmt="%s")
