@@ -3,6 +3,7 @@ env
 
 # ignore input files
 **.svg
+**.png
 
 # ignore output files
 **.csv
