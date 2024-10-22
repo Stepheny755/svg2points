@@ -17,7 +17,8 @@ parser.add_argument("--x_offset", help="x offset for SVG points", default=0)
 parser.add_argument("--y_offset", help="y offset for SVG points", default=0)
 args = parser.parse_args()
 
-
+# code from so:
+# https://stackoverflow.com/questions/69313876/how-to-get-points-of-the-svg-paths
 def get_point_at(path, distance, scale, offset):
     pos = path.point(distance)
     pos += offset
